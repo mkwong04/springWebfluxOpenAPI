@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 @SpringBootApplication
 @OpenAPIDefinition
 public class Application {
+	
 	/**
 	 * @param args 
 	 */
@@ -19,5 +20,4 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 	
-
 }
