@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import testm.model.Catalog;
+import testm.model.Fish;
 
 //start as spring boot test with random port (injected by local server port)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -59,6 +60,48 @@ public class WebTestClientTestCases {
 		            	 hasItems(l, hasProperty("name", equalTo("list")));
 		            	 hasItems(l, hasProperty("name", equalTo("buy")));
 		            	 hasItems(l, hasProperty("name", equalTo("sell")));
+		                 } );
+	}
+	
+	/**
+	 * test using JsonPath approach
+	 */
+	@Test
+	public void testGetFish() {
+		//http GET with API endpoint uri
+		webTestClient.get().uri("/fishes")
+		             .accept(MediaType.APPLICATION_JSON)
+		             //trigger exchange
+		             .exchange()
+		             //test for response status ok
+		             .expectStatus().isOk()
+		             //convert body to BodyContentSpec
+		             .expectBody()
+		             .consumeWith(System.out::println)
+		             //assert catalog return 
+		             .jsonPath("$..name").value(hasSize(3))
+		             .jsonPath("$..name").value(hasItems("Tiger fish","Lion fish","Zebra fish"));
+	}
+	
+	/**
+	 * test using mapped POJO from response body
+	 */
+	@Test
+	public void testGetFish2() {
+		//http GET with API endpoint uri
+		webTestClient.get().uri("/catalogues")
+		             .accept(MediaType.APPLICATION_JSON)
+		             //trigger exchange
+		             .exchange()
+		             //test for response status ok
+		             .expectStatus().isOk()
+		             //convert body to List of Catalog POJO
+		             .expectBodyList(Fish.class)
+		             .hasSize(3)
+		             .value(l -> { 
+		            	 hasItems(l, hasProperty("name", equalTo("Tiger fish")));
+		            	 hasItems(l, hasProperty("name", equalTo("Lion fish")));
+		            	 hasItems(l, hasProperty("name", equalTo("Zebra fish")));
 		                 } );
 	}
 }

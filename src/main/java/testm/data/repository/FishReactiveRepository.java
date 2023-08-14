@@ -1,7 +1,7 @@
 package testm.data.repository;
 
 import reactor.core.publisher.Flux;
-import testm.data.model.Catalog;
+import testm.data.model.Fish;
 
 /**
  * 
@@ -10,6 +10,6 @@ import testm.data.model.Catalog;
  * reactive wrapper interface for non reactive repository interface
  *
  */
-public interface CatalogReactiveRepository {
-	Flux<Catalog> findAllCatalog();
+public interface FishReactiveRepository {
+	Flux<Fish> findAllFishes();
 }

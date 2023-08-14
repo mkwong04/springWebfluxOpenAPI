@@ -1,5 +1,6 @@
 package testm.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import testm.data.repository.FishReactiveRepository;
 import testm.model.Fish;
 import testm.model.FishOrder;
 import testm.model.FishOrderResult;
@@ -24,6 +26,8 @@ import testm.model.FishOrderResult;
 @Tag(name = "Fish", description = "Fish Service API")
 public class FishController {
 
+	@Autowired
+	private FishReactiveRepository repo;
 	/**
 	 * 
 	 * @return
@@ -37,13 +41,12 @@ public class FishController {
             })
 	@GetMapping
 	public Flux<Fish> getFishes(){
-		//TODO: replace with repository/service layer
-		Fish[] fishes = new Fish[] {
-									new Fish("X1","Tiger Fish",10,100.0),
-									new Fish("Y1","Lion Fish", 9, 99.9)
-		};
+		Flux<testm.data.model.Fish> dbResults = repo.findAllFishes();
 		
-		return Flux.fromArray(fishes);
+		return dbResults.map(result -> new Fish(result.getId(), 
+												result.getName(), 
+												result.getAvailable(), 
+												result.getUnitPrice()));
 	}
 	
 	/**

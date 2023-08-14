@@ -15,6 +15,13 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import testm.data.model.Catalog;
 
+/**
+ * 
+ * @author mk
+ * 
+ * Reactive Wrapper for none reactive support db
+ *
+ */
 @Repository
 public class CatalogReactiveRepositoryImpl implements CatalogReactiveRepository {
 	
